@@ -1,5 +1,5 @@
 {
-  "name": "js-utils",
+  "name": "js-fast-utils",
   "version": "1.0.0",
   "description": "Utility javascript functions.",
   "main": "dist/index.ts",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexandrehpiva/js-utils.git"
+    "url": "git+https://github.com/alexandrehpiva/js-fast-utils.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexandrehpiva/js-utils/issues"
+    "url": "https://github.com/alexandrehpiva/js-fast-utils/issues"
   },
-  "homepage": "https://github.com/alexandrehpiva/js-utils#readme",
+  "homepage": "https://github.com/alexandrehpiva/js-fast-utils#readme",
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "jest": "^26.6.1",

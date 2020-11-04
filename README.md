@@ -1,4 +1,4 @@
-# js-utils
+# js-fast-utils
 Javascript utility functions
 
 
