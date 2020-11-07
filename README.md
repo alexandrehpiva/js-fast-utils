@@ -7,62 +7,289 @@ Javascript utility functions
 ## isDefined
 Check if is not undefined.
 
+
 ## isObject
 Check if is an Object.
+
 
 ## isString
 Check if is a String.
 
+
 ## isFunction
 Check if is a Function.
+
 
 ## isArray
 Check if is a Array.
 
+
 ## isNumber
 Check if is a Number.
+
 
 ## isRegex
 Check if is a RegExp.
 
+
 ## isNull
 Check if is null.
+
 
 ## isAsyncFunction
 Check if is an async function.
 
+
 ## isEmptyObject
 Check if is an Object and has no properties.
+
 
 ## isEmptyString
 Check if is equal to an empty string.
 
+
 ## isEmptyArray
 Check if is an Array and has zero items.
+
 
 ## isEmpty
 Check if is null, not defined or a type with no elements/properties/items even if it is defined.
 
 
-# Other utilities
+# Other utility functions
 
 ## objectMap
-Loop into object properties assigning to a new one using predicate function.
+Loop into object properties assigning to a new one using predicate function and get a new mapped object.
+
+It's useful for rearranging objects:
+
+```js
+const daysOfWeek = {
+  sun: { id: 0, name: 'Sunday', abbreviated: 'SUN' },
+  mon: { id: 1, name: 'Monday', abbreviated: 'MON' },
+  tue: { id: 2, name: 'Tuesday', abbreviated: 'TUE' },
+  wed: { id: 3, name: 'Wednesday', abbreviated: 'WED' },
+  thu: { id: 4, name: 'Thursday', abbreviated: 'THU' },
+  fri: { id: 5, name: 'Friday', abbreviated: 'FRI' },
+  sat: { id: 6, name: 'Saturday', abbreviated: 'SAT' }
+}
+
+const indexedDaysOfWeek = objectMap(daysOfWeek, ({ id, ...day }) => ({ [id]: day }))
+/* indexedDaysOfWeek:
+{
+  0: {name: "Sunday", abbreviated: "SUN"}
+  1: {name: "Monday", abbreviated: "MON"}
+  2: {name: "Tuesday", abbreviated: "TUE"}
+  3: {name: "Wednesday", abbreviated: "WED"}
+  4: {name: "Thursday", abbreviated: "THU"}
+  5: {name: "Friday", abbreviated: "FRI"}
+  6: {name: "Saturday", abbreviated: "SAT"}
+}
+*/
+```
+
 
 ## objectForeach
-Loop into object properties sending key-value pairs to the predicate function.
+Loop into object properties sending key-value pairs to the predicate function. 
+
+```js
+const groupedByDayOfWeek = {
+  monday: {
+    detectedPeople: 754,
+    inDeniedList: 0
+  },
+  tuesday: {
+    detectedPeople: 548,
+    inDeniedList: 2
+  }
+}
+
+objectForeach(groupedByDayOfWeek, (detectionInfo, dayOfWeek) => {
+  if (detectionInfo.inDeniedList > 0) {
+    // Do something
+  }
+})
+```
+
 
 ## objectToArrayMap
 Convert object properties into array items using the predicate function.
 
+```js
+const groupedByDayOfWeek = {
+  monday: {
+    detectedPeople: 754,
+    inDeniedList: 0
+  },
+  tuesday: {
+    detectedPeople: 548,
+    inDeniedList: 2
+  }
+}
+
+const dataArray = objectToArrayMap(groupedByDayOfWeek, (detectionInfo, dayOfWeek) => ({detectionInfo, dayOfWeek}))
+/* dataArray:
+[
+  {
+    "detectionInfo":{
+      "detectedPeople":754,
+      "inDeniedList":0
+    },
+    "dayOfWeek":"monday"
+  },
+  {
+    "detectionInfo":{
+      "detectedPeople":548,
+      "inDeniedList":2
+    },
+    "dayOfWeek":"tuesday"
+  }
+]
+*/
+```
+
+
 ## canBeNumber
 Verify if can be converted to a Number.
 
-## deleteEmptyKeys
-Iterate object properties and delete them if they are empty.
+```js
+console.log(canBeNumber('1')) // true
+console.log(canBeNumber(''), Number('')) // true, 0
+console.log(canBeNumber('Not a number')) // false
+```
 
-## deleteEmptyKeysRecursive
-Iterate object properties and delete them if they are empty or another condition (using a predicate) recursively.
+
+## deleteKeys
+Iterate object properties and delete them if they match the predicate.
+
+```js
+// For example, an object from a user page edit form that you want to delete the empty properties to not send them to backend api
+const userForm = {
+  username: 'tim@gmail.com',
+  password: undefined, // the user did not change the password and the backend do not accept an empty value for this field
+
+  // Other examples
+  emptyStringPassword: '',
+  emptyObject: {},
+  nullValueProp: null
+}
+
+deleteKeys(userForm, value => value === undefined)
+console.log(userForm) // { username: 'tim@gmail.com', emptyStringPassword: '', emptyObject: {}, nullValueProp: null }
+
+// You can use isEmpty to reach undefined, null, empty strings '' and empty objects {}:
+deleteKeys(userForm, value => isEmpty(value))
+console.log(userForm) // { username: 'tim@gmail.com' }
+
+// And them send the put request
+const response = await axios.put(userFormApiUrl, { data: userForm })
+```
+
+
+## deleteKeysRecursive
+Iterate object properties and delete them recursively if they match the predicate.
+
+```js
+// Using the same example in deleteKeys(). Take a look at it first.
+
+const userForm = {
+  username: 'tim@gmail.com',
+  password: undefined, // the user did not change the password and the backend do not accept an empty value for this field
+
+  // Will also delete this entire prop (unlike deleteEmptyKeys())
+  objectWithEmptyProps: {
+    emptyProp: ''
+  }
+}
+
+deleteEmptyKeysRecursive(userForm, value => isEmpty(value))
+
+console.log(userForm) // { username: 'tim@gmail.com' }
+```
+
+
+## deleteEmptyKeys (legacy)
+Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition.
+
+```js
+// For example, an object from a user page edit form
+const userForm = {
+  username: 'tim@gmail.com',
+  password: undefined, // the user did not change the password and the backend do not accept an empty value for this field
+
+  // Other deleted examples
+  emptyStringPassword: '',
+  emptyObject: {},
+  nullValueProp: null
+}
+
+deleteEmptyKeys(userForm)
+
+console.log(userForm) // { username: 'tim@gmail.com' }
+
+// And them send the put request
+const response = await axios.put(userFormApiUrl, { data: userForm })
+```
+
+### Deprecation alert!
+This function will be removed in next release!
+deleteKeys(userForm, value => isEmpty(value))
+You can use deleteKeys + isEmpty to achieve the same result:
+
+```js
+deleteKeys(userForm, value => isEmpty(userForm))
+```
+
+## deleteEmptyKeysRecursive (legacy)
+Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition recursively.
+
+```js
+const userForm = {
+  username: 'tim@gmail.com',
+  password: undefined, // the user did not change the password and the backend do not accept an empty value for this field
+
+  // Will also delete this entire prop (unlike deleteEmptyKeys())
+  objectWithEmptyProps: {
+    emptyProp: ''
+  }
+}
+
+deleteEmptyKeysRecursive(userForm)
+
+console.log(userForm) // { username: 'tim@gmail.com' }
+```
+
+### Deprecation alert!
+This function will be removed in next release!
+deleteKeysRecursive(userForm, value => isEmpty(value))
+You can use deleteKeysRecursive + isEmpty to achieve the same result:
+
+```js
+deleteKeysRecursive(userForm, value => isEmpty(userForm))
+```
 
 ## mapAsync
 Generate a new array by iterate through items and using a async predicate function modify them. The return will be a Promise.
+
+
+# Changes
+
+### Version 1.0.0
+
+- Initial release functions
+
+### Version 1.1.0
+
+- Add deleteKeys function
+
+- Add deleteKeysRecursive function
+
+#### Breaking changes!
+
+1. Fix deleteEmptyKeys logic to delete undefined, null, empty strings '' and empty objects {} (before the function was just undefined and empty objects {}).
+
+2. Fix deleteEmptyKeysRecursive logic to delete undefined, null, empty strings '' and empty objects {} (before the function was just undefined and empty objects {}).
+
+#### Warnings
+
+The deleteEmptyKeys and deleteEmptyKeysRecursive functions will not be part of the next release!

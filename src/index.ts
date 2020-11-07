@@ -1,5 +1,5 @@
 /**
- * Utility functions
+ * Javascript type verification functions
  */
 
 /**
@@ -81,7 +81,10 @@ export const isEmptyArray = (arr: any) => isArray(arr) && arr.length === 0
  */
 export const isEmpty = (ref: any) => isNull(ref) || !isDefined(ref) || isEmptyString(ref) || isEmptyArray(ref) || isEmptyObject(ref)
 
-// Other utilities
+
+/**
+ * Other utility functions
+ */
 
 /**
  * Loop into object properties assigning to a new one using predicate function.
@@ -119,27 +122,41 @@ export const objectToArrayMap = (object: any, predicate = (value: any, key: stri
 export const canBeNumber = (n: any) => Number(n).toString() !== 'NaN'
 
 /**
- * Iterate object properties and delete them if they are empty.
+ * Iterate object properties and delete them if they match the predicate.
  * @param {Object} obj Object
+ * @param {Function} deletePredicate Predicate function that will iterate through the object's properties, deciding when to delete.
  */
-export const deleteEmptyKeys = (obj: any) => (Object.keys(obj).map((key: any) => (obj[key] === undefined || isEmptyObject(obj[key])) && delete obj[key]) || true) && obj
+export const deleteKeys = (obj: any, deletePredicate: (value: any, key?: string) => boolean) => (Object.keys(obj).map((key: any) => deletePredicate(obj[key]) && delete obj[key]) || true) && obj
 
 /**
- * Iterate object properties and delete them if they are empty or another condition recursively.
+ * Iterate object properties and delete them recursively if they match the predicate.
  * @param {Object} obj Object
- * @param {Function} deletePredicate Predicate function that specifies another condition to delete properties. The predicate return must be have boolean type.
+ * @param {Function} deletePredicate Predicate function that will iterate through the object's properties, deciding when to delete.
  */
-export const deleteEmptyKeysRecursive = (obj: any, deletePredicate = (..._params: any[]) => false) => {
+export const deleteKeysRecursive = (obj: any, deletePredicate: (value: any, key?: string) => boolean) => {
   Object.keys(obj).forEach(key => {
-    // if (obj[key] && typeof obj[key] === 'object') deleteEmptyKeysRecursive(obj[key])
-    if (isObject(obj[key])) deleteEmptyKeysRecursive(obj[key])
-    else if (obj[key] === undefined || isEmptyObject(obj[key]) || deletePredicate(obj[key])) delete obj[key]
+    if (isObject(obj[key])) deleteKeysRecursive(obj[key], deletePredicate)
+    else if (deletePredicate(obj[key])) delete obj[key]
 
-    // Delete object after delete all empty keys (if is empty)
-    if (isEmptyObject(obj[key])) delete obj[key]
+    // Reapplying predicate delete to the original object (in case that the predicate specifies to delete empty objects) 
+    if (deletePredicate(obj[key])) delete obj[key]
   })
   return obj
 }
+
+/**
+ * Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition.
+ * @param {Object} obj Object
+ * @param {Function} deletePredicate Predicate function that specifies another condition to delete properties.
+ */
+export const deleteEmptyKeys = (obj: any, deletePredicate?: (value: any, key?: string) => boolean) => deleteKeys(obj, (value, key) => isEmpty(value) || (!!deletePredicate && deletePredicate(value, key)))
+
+/**
+ * Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition recursively.
+ * @param {Object} obj Object
+ * @param {Function} deletePredicate Predicate function that specifies another condition to delete properties.
+ */
+export const deleteEmptyKeysRecursive = (obj: any, deletePredicate?: (value: any, key?: string) => boolean) => deleteKeysRecursive(obj, (value, key) => isEmpty(value) || (!!deletePredicate && deletePredicate(value, key)))
 
 /**
  * Generate a new array by iterate through items and using a async predicate function modify them. The return will be a Promise.
