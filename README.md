@@ -300,3 +300,9 @@ Generate a new array by iterate through items and using a async predicate functi
 
   2. Removed deprecated deleteEmptyKeysRecursive function (deleteKeysRecursive can be used instead)
 
+
+# TODOS:
+
+- Fix some typescript typings
+
+- Add unity tests
