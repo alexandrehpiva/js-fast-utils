@@ -145,20 +145,6 @@ export const deleteKeysRecursive = (obj: any, deletePredicate: (value: any, key?
 }
 
 /**
- * Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition.
- * @param {Object} obj Object
- * @param {Function} deletePredicate Predicate function that specifies another condition to delete properties.
- */
-export const deleteEmptyKeys = (obj: any, deletePredicate?: (value: any, key?: string) => boolean) => deleteKeys(obj, (value, key) => isEmpty(value) || (!!deletePredicate && deletePredicate(value, key)))
-
-/**
- * Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition recursively.
- * @param {Object} obj Object
- * @param {Function} deletePredicate Predicate function that specifies another condition to delete properties.
- */
-export const deleteEmptyKeysRecursive = (obj: any, deletePredicate?: (value: any, key?: string) => boolean) => deleteKeysRecursive(obj, (value, key) => isEmpty(value) || (!!deletePredicate && deletePredicate(value, key)))
-
-/**
  * Generate a new array by iterate through items and using a async predicate function modify them. The return will be a Promise.
  * @param {Array} array Array
  * @param {Function} asyncPredicate A promise or async function

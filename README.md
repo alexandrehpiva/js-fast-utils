@@ -278,6 +278,7 @@ Generate a new array by iterate through items and using a async predicate functi
 
 - Initial release functions
 
+
 ### Version 1.1.0
 
 - Add deleteKeys function
@@ -286,10 +287,16 @@ Generate a new array by iterate through items and using a async predicate functi
 
 #### Breaking changes!
 
-1. Fix deleteEmptyKeys logic to delete undefined, null, empty strings '' and empty objects {} (before the function was just undefined and empty objects {}).
+  1. Fix deleteEmptyKeys logic to delete undefined, null, empty strings '' and empty objects {} (before the function was just undefined and empty objects {}).
 
-2. Fix deleteEmptyKeysRecursive logic to delete undefined, null, empty strings '' and empty objects {} (before the function was just undefined and empty objects {}).
+  2. Fix deleteEmptyKeysRecursive logic to delete undefined, null, empty strings '' and empty objects {} (before the function was just undefined and empty objects {}).
 
-#### Warnings
 
-The deleteEmptyKeys and deleteEmptyKeysRecursive functions will not be part of the next release!
+### Version 1.2.0
+
+#### Breaking changes!
+
+  1. Removed deprecated deleteEmptyKeys function (deleteKeys can be used instead)
+
+  2. Removed deprecated deleteEmptyKeysRecursive function (deleteKeysRecursive can be used instead)
+
