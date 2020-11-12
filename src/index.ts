@@ -1,6 +1,5 @@
-/**
- * Javascript type verification functions
- */
+
+// #region Javascript type verification functions
 
 /**
  * Check if is not undefined.
@@ -81,10 +80,21 @@ export const isEmptyArray = (arr: any) => isArray(arr) && arr.length === 0
  */
 export const isEmpty = (ref: any) => isNull(ref) || !isDefined(ref) || isEmptyString(ref) || isEmptyArray(ref) || isEmptyObject(ref)
 
+//  #endregion
+
+
+// #region Date functions
 
 /**
- * Other utility functions
+ * Test a string if can be parsed to Date
+ * @param date String to test for
  */
+export const isDate = (date: string) => !isNaN(Date.parse(date))
+
+// #endregion
+
+
+// #region Other utility functions
 
 /**
  * Loop into object properties assigning to a new one using predicate function.
@@ -155,3 +165,5 @@ export const mapAsync = async (array: any, asyncPredicate: Function) => {
 }
 
 // export const stateArrayPush = (stateArray, stateArraySetter, newItem) => stateArraySetter([...stateArray, newItem])
+
+// #endregion

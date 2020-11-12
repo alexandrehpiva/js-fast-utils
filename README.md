@@ -1,6 +1,8 @@
 # js-fast-utils
 Javascript utility functions
 
+![npm](https://img.shields.io/npm/dy/js-fast-utils)
+
 
 # Javascript type verification functions
 
@@ -54,6 +56,12 @@ Check if is an Array and has zero items.
 
 ## isEmpty
 Check if is null, not defined or a type with no elements/properties/items even if it is defined.
+
+
+# Date functions
+
+## isDate
+Test a string if can be parsed to Date
 
 
 # Other utility functions
