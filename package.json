@@ -1,6 +1,6 @@
 {
   "name": "js-fast-utils",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Utility javascript functions.",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
