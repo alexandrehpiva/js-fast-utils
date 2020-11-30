@@ -210,71 +210,11 @@ const userForm = {
   }
 }
 
-deleteEmptyKeysRecursive(userForm, value => isEmpty(value))
-
-console.log(userForm) // { username: 'tim@gmail.com' }
-```
-
-
-## deleteEmptyKeys (legacy)
-Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition.
-
-```js
-// For example, an object from a user page edit form
-const userForm = {
-  username: 'tim@gmail.com',
-  password: undefined, // the user did not change the password and the backend do not accept an empty value for this field
-
-  // Other deleted examples
-  emptyStringPassword: '',
-  emptyObject: {},
-  nullValueProp: null
-}
-
-deleteEmptyKeys(userForm)
-
-console.log(userForm) // { username: 'tim@gmail.com' }
-
-// And them send the put request
-const response = await axios.put(userFormApiUrl, { data: userForm })
-```
-
-### Deprecation alert!
-This function will be removed in next release!
-deleteKeys(userForm, value => isEmpty(value))
-You can use deleteKeys + isEmpty to achieve the same result:
-
-```js
-deleteKeys(userForm, value => isEmpty(userForm))
-```
-
-## deleteEmptyKeysRecursive (legacy)
-Iterate object properties and delete them if they are empty (undefined, null, empty string '' or empty object {}) or another specified condition recursively.
-
-```js
-const userForm = {
-  username: 'tim@gmail.com',
-  password: undefined, // the user did not change the password and the backend do not accept an empty value for this field
-
-  // Will also delete this entire prop (unlike deleteEmptyKeys())
-  objectWithEmptyProps: {
-    emptyProp: ''
-  }
-}
-
-deleteEmptyKeysRecursive(userForm)
-
-console.log(userForm) // { username: 'tim@gmail.com' }
-```
-
-### Deprecation alert!
-This function will be removed in next release!
 deleteKeysRecursive(userForm, value => isEmpty(value))
-You can use deleteKeysRecursive + isEmpty to achieve the same result:
 
-```js
-deleteKeysRecursive(userForm, value => isEmpty(userForm))
+console.log(userForm) // { username: 'tim@gmail.com' }
 ```
+
 
 ## mapAsync
 Generate a new array by iterate through items and using a async predicate function modify them. The return will be a Promise.
