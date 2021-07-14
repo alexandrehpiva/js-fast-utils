@@ -1,7 +1,8 @@
+[![npm](https://img.shields.io/npm/v/js-fast-utils)](https://www.npmjs.com/package/js-fast-utils)
+[![npm](https://img.shields.io/npm/dy/js-fast-utils)](https://www.npmjs.com/package/js-fast-utils)
+
 # js-fast-utils
 Javascript utility functions
-
-![npm](https://img.shields.io/npm/dy/js-fast-utils)
 
 
 # Javascript type verification functions
